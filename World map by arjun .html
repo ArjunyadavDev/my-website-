@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Map by Arjun Yadav</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  
+  <!-- Custom Styling -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
+      animation: fadeInBody 2s ease;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin: 30px 0 10px;
+      animation: slideDown 1.5s ease;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      animation: fadeInText 2s ease 1s forwards;
+      opacity: 0;
+    }
+
+    #map {
+      height: 80vh;
+      width: 90vw;
+      margin: auto;
+      border: 5px solid white;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      animation: mapZoomIn 1s ease-in-out 2s forwards;
+      opacity: 0;
+    }
+
+    /* Animations */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInText {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes mapZoomIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet GeoNames Plugin for Hover Labels -->
+  <script src="https://unpkg.com/leaflet-geonames@2.1.0/dist/leaflet-geonames.min.js"></script>
+</head>
+<body>
+
+  <h1>World Map by Arjun Yadav</h1>
+  <h2>World Map</h2>
+  <div id="map"></div>
+
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([20, 0], 2);
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a tooltip layer with country names using GeoNames plugin
+    L.control.geonames({
+      username: 'demo', // You can replace with your own GeoNames username for more results
+      position: 'topright',
+      lang: 'en',
+      zoomLevel: 5,
+      maxresults: 5
+    }).addTo(map);
+
+    // Add hover popup with lat/lng and zoom info
+    map.on('mousemove', function (e) {
+      const popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(`Lat: ${e.latlng.lat.toFixed(2)}<br>Lng: ${e.latlng.lng.toFixed(2)}`)
+        .openOn(map);
+      setTimeout(() => map.closePopup(), 1000);
+    });
+  </script>
+</body>
+</html>
